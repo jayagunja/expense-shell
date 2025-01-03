@@ -1,4 +1,5 @@
 #!/bin/bash
+
 USERID=$(id -u)
 R="\e[31m"
 G="\e[32m"
@@ -13,12 +14,11 @@ LOG_FILE_NAME="$LOGS_FOLDER/$LOG_FILE-$TIMESTAMP.log"
 VALIDATE(){
     if [ $1 -ne 0 ]
     then
-        echo -e "$2... $R Failure $N"
+        echo -e "$2 ... $R FAILURE $N"
         exit 1
     else
-        echo -e "$2.. $G Success $N"
+        echo -e "$2 ... $G SUCCESS $N"
     fi
-
 }
 
 CHECK_ROOT(){
@@ -30,31 +30,30 @@ CHECK_ROOT(){
 }
 
 mkdir -p $LOGS_FOLDER
-
 echo "Script started executing at: $TIMESTAMP" &>>$LOG_FILE_NAME
 
 CHECK_ROOT
 
-dnf install nginx -y &>>$LOG_FILE_NAME
-VALIDATE $? "Installing nginx server"
+dnf install nginx -y  &>>$LOG_FILE_NAME
+VALIDATE $? "Installing Nginx Server"
 
 systemctl enable nginx &>>$LOG_FILE_NAME
-VALIDATE $? "Enabling nginx"
+VALIDATE $? "Enabling Nginx server"
 
 systemctl start nginx &>>$LOG_FILE_NAME
-VALIDATE $? "srating nginx"
+VALIDATE $? "Starting Nginx Server"
 
 rm -rf /usr/share/nginx/html/* &>>$LOG_FILE_NAME
-VALIDATE $? "Removing existing version code"
+VALIDATE $? "Removing existing version of code"
 
 curl -o /tmp/frontend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip &>>$LOG_FILE_NAME
-VALIDATE $? "Downloading latest code"
+VALIDATE $? "Downloading Latest code"
 
-cd /usr/share/nginx/html &>>$LOG_FILE_NAME
+cd /usr/share/nginx/html
 VALIDATE $? "Moving to HTML directory"
 
 unzip /tmp/frontend.zip &>>$LOG_FILE_NAME
-VALIDATE $? "Unzipping frontend code"
+VALIDATE $? "unzipping the frontend code"
 
 cp /home/ec2-user/expense-shell/expense.conf /etc/nginx/default.d/expense.conf
 VALIDATE $? "Copied expense config"
