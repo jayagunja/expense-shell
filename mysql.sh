@@ -23,10 +23,11 @@ VALIDATE(){
 CHECK_ROOT(){
     if [ $USERID -ne 0 ]
     then
-        echo "Error:: you must have sudo access to execute this script" &>>$LOG_FILE_NAME
-        exit 1 # other than 0
-    fi 
-}  
+        echo "ERROR:: You must have sudo access to execute this script"
+        exit 1 #other than 0
+    fi
+}
+
 echo "Script started executing at: $TIMESTAMP" &>>$LOG_FILE_NAME
 
 CHECK_ROOT
