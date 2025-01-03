@@ -48,8 +48,8 @@ then
     useradd expense &>>$LOG_FILE_NAME
     VALIDATE $? "Create expense user"
 else
-    echo -e "expense user already exist"... $Y SKIPPING $"    
-
+    echo -e "expense user already exist... $Y SKIPPING $"
+fi        
 
 mkdir /app &>>$LOG_FILE_NAME
 VALIDATE $? "Creating app directory"
